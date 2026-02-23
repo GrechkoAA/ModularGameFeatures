@@ -32,7 +32,7 @@ namespace Examples.Features.Currency.Bank.Scripts.UI.Currency.Presenters.Creator
             {
                 CurrencyOperationModel currencyOperationModel = new(currencyCell);
                 View.CurrencyOperationPanel instanceCurrencyView = _currencyOperationPanel.Spawn();
-                CurrencyOperationPanelPresenter currencyPresenter = new(currencyCell, currencyOperationModel, instanceCurrencyView, GetIcon(currencyCell));
+                CurrencyOperationPanelPresenter currencyPresenter = new(currencyCell, currencyOperationModel, instanceCurrencyView, GetIcon(currencyCell.Type));
 
                 instanceCurrencyView.Construct(currencyPresenter);
                 instanceCurrencyView.Initialize();
@@ -42,12 +42,18 @@ namespace Examples.Features.Currency.Bank.Scripts.UI.Currency.Presenters.Creator
             }
         }
 
-        private Sprite GetIcon(CurrencyCell currencyCell)
+        private Sprite GetIcon(CurrencyType currencyType)
         {
-            CurrencyType currencyType = _currencyBank.GetType(currencyCell);
-            CurrencyIconSettings currencyIconSettings = _currencyIconStaticData.GetCurrencySettings(currencyType);
-            
-            return currencyIconSettings.Icon;
+            CurrencyIconSettings iconSettings = _currencyIconStaticData.GetCurrencySettings(currencyType);
+
+            if (iconSettings.Icon == null)
+            {
+                Debug.LogError($"No icon found for currency {currencyType}");
+                
+                return null;
+            }
+
+            return iconSettings.Icon;
         }
 
         public void Dispose()

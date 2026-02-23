@@ -11,7 +11,7 @@ namespace Modules.Features.Currency.Bank.Tests
         [Test]
         public void Earn_IncreasesValue()
         {
-            var storage = new CurrencyCell(10);
+            var storage = new CurrencyCell(10, CurrencyType.Gold);
 
             storage.Add(5);
 
@@ -21,7 +21,7 @@ namespace Modules.Features.Currency.Bank.Tests
         [Test]
         public void Earn_ShouldIncreaseValue_WhenStartingNegative()
         {
-            var storage = new CurrencyCell(-10);
+            var storage = new CurrencyCell(-10, CurrencyType.Gold);
 
             storage.Add(5);
 
@@ -31,7 +31,7 @@ namespace Modules.Features.Currency.Bank.Tests
         [Test]
         public void Earn_WhenValueOverflowsWithoutChecked_WrapsAround()
         {
-            var storage = new CurrencyCell(int.MaxValue);
+            var storage = new CurrencyCell(int.MaxValue, CurrencyType.Gold);
 
             storage.Add(1);
 
@@ -45,7 +45,7 @@ namespace Modules.Features.Currency.Bank.Tests
         [Test]
         public void Spend_DoesNotGoBelowZero()
         {
-            var storage = new CurrencyCell(5);
+            var storage = new CurrencyCell(5, CurrencyType.Gold);
 
             storage.Spend(10);
 
@@ -55,7 +55,7 @@ namespace Modules.Features.Currency.Bank.Tests
         [Test]
         public void Spend_ReducesValue()
         {
-            var storage = new CurrencyCell(10);
+            var storage = new CurrencyCell(10, CurrencyType.Gold);
 
             storage.Spend(3);
 
@@ -65,7 +65,7 @@ namespace Modules.Features.Currency.Bank.Tests
         [Test]
         public void Set_DoesNotGoBelowZero()
         {
-            var storage = new CurrencyCell(5);
+            var storage = new CurrencyCell(5, CurrencyType.Gold);
 
             storage.Set(-10);
 
@@ -75,7 +75,7 @@ namespace Modules.Features.Currency.Bank.Tests
         [Test]
         public void Set_Construct_DoesNotGoBelowZero()
         {
-            var storage = new CurrencyCell(-5);
+            var storage = new CurrencyCell(-5, CurrencyType.Gold);
 
             Assert.AreEqual(0, storage.Value);
         }
@@ -87,7 +87,7 @@ namespace Modules.Features.Currency.Bank.Tests
         [Test]
         public void Set_ChangesValue()
         {
-            var storage = new CurrencyCell(10);
+            var storage = new CurrencyCell(10, CurrencyType.Gold);
 
             storage.Set(20);
 
@@ -97,7 +97,7 @@ namespace Modules.Features.Currency.Bank.Tests
         [Test]
         public void Set_TriggersSetEvent()
         {
-            var storage = new CurrencyCell(10);
+            var storage = new CurrencyCell(10, CurrencyType.Gold);
 
             int previous = 0;
             int current = 0;
@@ -117,7 +117,7 @@ namespace Modules.Features.Currency.Bank.Tests
         [Test]
         public void Set_ToSameValue_StillTriggersSetEvent()
         {
-            var storage = new CurrencyCell(10);
+            var storage = new CurrencyCell(10, CurrencyType.Gold);
 
             int previous = 0;
             int current = 0;

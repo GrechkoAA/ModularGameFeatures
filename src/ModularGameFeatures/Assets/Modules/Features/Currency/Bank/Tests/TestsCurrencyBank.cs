@@ -13,10 +13,10 @@ namespace Modules.Features.Currency.Bank.Tests
         [SetUp]
         public void SetUp()
         {
-            var cells = new List<(CurrencyType, CurrencyCell)>
+            var cells = new List<CurrencyAmount>
             {
-                (CurrencyType.Gold, new CurrencyCell(100)),
-                (CurrencyType.Gems, new CurrencyCell(50))
+                new (CurrencyType.Gold, 100),
+                new (CurrencyType.Gems, 50)
             };
 
             _bank = new CurrencyBank(cells);
@@ -125,16 +125,16 @@ namespace Modules.Features.Currency.Bank.Tests
         [Test]
         public void IsEnough_ThrowsException_WhenCurrencyNotInBank()
         {
-            var cells = new List<(CurrencyType, CurrencyCell)>
+            var cells = new List<CurrencyAmount>
             {
-                (CurrencyType.Gold, new CurrencyCell(100)),
+                new (CurrencyType.Gold, 100),
             };
 
             CurrencyBank bank = new CurrencyBank(cells);
             
             var cost = new List<CurrencyAmount>
             {
-                new CurrencyAmount(CurrencyType.Gems, 10) // Gems нет в банке
+                new(CurrencyType.Gems, 10) // Gems нет в банке
             };
 
             Assert.Throws<InvalidOperationException>(() => bank.IsEnough(cost));

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Modules.Features.CurrencyBank.Tests")]
 
 namespace Modules.Features.Currency.Bank.Scripts
 {
@@ -17,6 +20,8 @@ namespace Modules.Features.Currency.Bank.Scripts
     public class CurrencyCell
     {
         public int Value { get; private set; }
+
+        public readonly CurrencyType Type;
 
         /// <summary>
         /// Событие срабатывает после добавления валюты. Передаёт новое и предыдущее значение.
@@ -38,8 +43,11 @@ namespace Modules.Features.Currency.Bank.Scripts
         /// </summary>
         public event Action OnChanged;
 
-        public CurrencyCell(int value) => 
+        internal CurrencyCell(int value, CurrencyType type)
+        {
             Value = Math.Max(0, value);
+            Type = type;
+        }
 
         /// <summary>
         /// Добавляет указанное количество валюты.

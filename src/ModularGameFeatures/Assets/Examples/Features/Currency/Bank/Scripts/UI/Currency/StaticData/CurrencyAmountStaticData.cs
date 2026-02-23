@@ -11,8 +11,8 @@ namespace Examples.Features.Currency.Bank.Scripts.UI.Currency.StaticData
         [field: SerializeField] public CurrencyType CurrencyType { get; set; }
         [field: SerializeField] public int Amount { get; set; }
 
-        public (CurrencyType, CurrencyCell) GetCell() => 
-            (CurrencyType, new CurrencyCell(Amount));
+        public CurrencyAmount GetCell() => 
+            new (CurrencyType, Amount);
     }
     
     [CreateAssetMenu(fileName = nameof(CurrencyAmountStaticData), menuName = "StaticData/UI/Currency" + nameof(CurrencyAmountStaticData), order = 0)]
@@ -20,7 +20,7 @@ namespace Examples.Features.Currency.Bank.Scripts.UI.Currency.StaticData
     {
         [SerializeField] private CurrencyAmountSettings[] _settings;
 
-        public IEnumerable<(CurrencyType, CurrencyCell)> GetCells()
+        public IEnumerable<CurrencyAmount> GetCells()
         {
             foreach (var setting in _settings)
                 yield return setting.GetCell();

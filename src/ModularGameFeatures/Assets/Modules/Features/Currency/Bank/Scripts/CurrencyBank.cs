@@ -7,24 +7,23 @@ namespace Modules.Features.Currency.Bank.Scripts
     [Serializable]
     public class CurrencyBank : IEnumerable<CurrencyCell>
     {
-        //TODO реализация двунаправленного словаря
         private readonly Dictionary<CurrencyType, CurrencyCell> _cellsForward;
-        private readonly Dictionary<CurrencyCell, CurrencyType> _cellsReverse;
 
         public int Count => _cellsForward.Count;
 
-        public CurrencyBank(IEnumerable<(CurrencyType currencyType, CurrencyCell currencyCell)> cells)
+        public CurrencyBank(IEnumerable<CurrencyAmount> cells)
         {
             if (cells == null)
                 throw new ArgumentNullException(nameof(cells));
 
             _cellsForward = new Dictionary<CurrencyType, CurrencyCell>();
-            _cellsReverse = new Dictionary<CurrencyCell, CurrencyType>();
 
             foreach (var cell in cells)
             {
-                _cellsForward.Add(cell.currencyType, cell.currencyCell);
-                _cellsReverse.Add(cell.currencyCell, cell.currencyType);
+                if (_cellsForward.ContainsKey(cell.Type))
+                    throw new InvalidOperationException($"Duplicate currency type {cell.Type}");
+
+                _cellsForward.Add(cell.Type, new CurrencyCell(cell.Amount, cell.Type));
             }
         }
 
@@ -71,17 +70,6 @@ namespace Modules.Features.Currency.Bank.Scripts
             return cell;
         }
 
-        public CurrencyType GetType(CurrencyCell cell)
-        {
-            if (cell == null)
-                throw new ArgumentNullException(nameof(cell));
-
-            if (!_cellsReverse.TryGetValue(cell, out var cellType))
-                throw new InvalidOperationException($"Currency {cell} not registered");
-
-            return cellType;
-        }
-
         /// <summary>
         /// Проверяет, достаточно ли валюты для указанного списка.
         /// </summary>
@@ -95,7 +83,7 @@ namespace Modules.Features.Currency.Bank.Scripts
 
             foreach (var price in cost)
             {
-                if (GetCell(price.Type).Value < price.Amount)
+                if (price.Amount >= GetCell(price.Type).Value)
                     return false;
             }
 
