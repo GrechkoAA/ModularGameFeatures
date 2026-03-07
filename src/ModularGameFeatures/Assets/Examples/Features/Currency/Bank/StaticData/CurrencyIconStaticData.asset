@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: BankExample::Examples.Features.Currency.Bank.Scripts.UI.Currency.CurrencyIconStaticData
   _settings:
   - <CurrencyType>k__BackingField: 1
-    <Icon>k__BackingField: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+    <Icon>k__BackingField: {fileID: -193848521785882218, guid: e3fc955e340678541a7f69a39fc5aec0, type: 3}
   - <CurrencyType>k__BackingField: 2
-    <Icon>k__BackingField: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+    <Icon>k__BackingField: {fileID: 5731700047478473940, guid: d8e4740d25fd92c428289af0088208d0, type: 3}
+  - <CurrencyType>k__BackingField: 3
+    <Icon>k__BackingField: {fileID: 2715409951904314068, guid: 97da73e1e810d264792bc5a70ff6e6b4, type: 3}

@@ -3,20 +3,25 @@ using NUnit.Framework;
 
 namespace Modules.Features.Currency.Bank.Tests
 {
-    [TestFixture]
     public class TestsCurrencyCell
     {
         #region Earn
 
-        [Test]
-        public void Earn_IncreasesValue()
+        [TestCase(-10, 5, 5)]
+        [TestCase(0, 15, 15)]
+        [TestCase(15, 15, 30)]
+        public void Earn_IncreasesValue(int initialAmount, int addAmount, int expected)
         {
-            var storage = new CurrencyCell(10, CurrencyType.Gold);
+            //Arrange
+            var storage = new CurrencyCell(initialAmount, CurrencyType.Gold);
 
-            storage.Add(5);
+            //Act
+            storage.Add(addAmount);
 
-            Assert.AreEqual(15, storage.Value);
+            //Assert
+            Assert.AreEqual(expected, storage.Value);
         }
+        
 
         [Test]
         public void Earn_ShouldIncreaseValue_WhenStartingNegative()

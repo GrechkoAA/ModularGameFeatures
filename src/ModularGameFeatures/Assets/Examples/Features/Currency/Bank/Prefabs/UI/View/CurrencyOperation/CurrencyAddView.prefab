@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: 887401772991968181, guid: 4fe252bc80134fd4caa5dc5ca7d42c11, type: 3}
       propertyPath: m_TargetGraphic
       value: 
-      objectReference: {fileID: 2801849946830580169}
+      objectReference: {fileID: 2332952993227611509}
     - target: {fileID: 5305189641318128946, guid: 4fe252bc80134fd4caa5dc5ca7d42c11, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -97,10 +97,11 @@ PrefabInstance:
       value: CurrencyAddView
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5837856229286173693, guid: 4fe252bc80134fd4caa5dc5ca7d42c11, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5305189641318128946, guid: 4fe252bc80134fd4caa5dc5ca7d42c11, type: 3}
-      insertIndex: 1
+      insertIndex: 0
       addedObject: {fileID: 7782620768913879302}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe252bc80134fd4caa5dc5ca7d42c11, type: 3}
@@ -206,9 +207,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 88332db97d3c01748bd7ac3eb43186ca, type: 3}
---- !u!114 &2801849946830580169 stripped
+--- !u!114 &2332952993227611509 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8762623311072483041, guid: 88332db97d3c01748bd7ac3eb43186ca, type: 3}
+  m_CorrespondingSourceObject: {fileID: 9158470837865865821, guid: 88332db97d3c01748bd7ac3eb43186ca, type: 3}
   m_PrefabInstance: {fileID: 6879596800299302696}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

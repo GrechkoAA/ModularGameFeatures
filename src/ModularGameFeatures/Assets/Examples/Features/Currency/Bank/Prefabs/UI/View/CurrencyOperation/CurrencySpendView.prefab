@@ -11,7 +11,11 @@ PrefabInstance:
     - target: {fileID: 887401772991968181, guid: 4fe252bc80134fd4caa5dc5ca7d42c11, type: 3}
       propertyPath: m_TargetGraphic
       value: 
-      objectReference: {fileID: 8326731733229696426}
+      objectReference: {fileID: 1257645788477518050}
+    - target: {fileID: 1720539159512519362, guid: 4fe252bc80134fd4caa5dc5ca7d42c11, type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4296490973642157229, guid: 4fe252bc80134fd4caa5dc5ca7d42c11, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -105,10 +109,11 @@ PrefabInstance:
       value: CurrencySpendView
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5837856229286173693, guid: 4fe252bc80134fd4caa5dc5ca7d42c11, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5305189641318128946, guid: 4fe252bc80134fd4caa5dc5ca7d42c11, type: 3}
-      insertIndex: 1
+      insertIndex: 0
       addedObject: {fileID: 4138026925431467365}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe252bc80134fd4caa5dc5ca7d42c11, type: 3}
@@ -214,14 +219,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d343a9cc4feee2448abc4c715fb1b259, type: 3}
---- !u!224 &4138026925431467365 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 751736998547167682, guid: d343a9cc4feee2448abc4c715fb1b259, type: 3}
-  m_PrefabInstance: {fileID: 3675937034325996711}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8326731733229696426 stripped
+--- !u!114 &1257645788477518050 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4651641331466420493, guid: d343a9cc4feee2448abc4c715fb1b259, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2483598235785217093, guid: d343a9cc4feee2448abc4c715fb1b259, type: 3}
   m_PrefabInstance: {fileID: 3675937034325996711}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -230,3 +230,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!224 &4138026925431467365 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 751736998547167682, guid: d343a9cc4feee2448abc4c715fb1b259, type: 3}
+  m_PrefabInstance: {fileID: 3675937034325996711}
+  m_PrefabAsset: {fileID: 0}

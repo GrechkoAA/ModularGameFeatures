@@ -25,10 +25,12 @@ namespace Examples.Features.Currency.Bank.Scripts.UI.Currency.Presenters.Currenc
             _view = currencyOperationPanel;
         }
         
-        public string Currency => _currencyCell.Value.ToString();
+        public string Currency => 
+            _currencyCell.Value.ToString("N0");
 
-        public bool SpendInteractable => _currencyCell.Value > 0;
         public Sprite Icon { get; }
+        
+        public bool SpendInteractable => _currencyCell.Value > 0;
 
         public View.CurrencyOperationPanel View => _view;
 

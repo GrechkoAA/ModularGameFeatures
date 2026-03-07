@@ -4,6 +4,7 @@
     {
         None = 0,
         Gold = 1,
-        Gems = 2
+        Gems = 2,
+        Heart = 3
     }
 }

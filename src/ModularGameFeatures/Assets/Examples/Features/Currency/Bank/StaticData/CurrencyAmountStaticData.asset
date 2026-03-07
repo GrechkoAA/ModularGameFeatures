@@ -17,3 +17,5 @@ MonoBehaviour:
     <Amount>k__BackingField: 5
   - <CurrencyType>k__BackingField: 2
     <Amount>k__BackingField: 0
+  - <CurrencyType>k__BackingField: 3
+    <Amount>k__BackingField: 999999
