@@ -20,6 +20,9 @@
 
 - 🖼️ Sprite Bank
 - 📟 Inventory
+- 🎬 Scene Loader
+- ♻️ Object Pool
+- 🎶 Audio Bank
 
 ### 💰 Currency Bank
 
