@@ -32,9 +32,7 @@
   - Нумерация и защита от дублей
 
 #### Скриншот окна генерации
-![Currency Generator Window](/Docs/CurrencyEnumGeneratorWindow.png)
-
-
+![Currency Generator Window](https://raw.githubusercontent.com/GrechkoAA/ModularGameFeatures/main/Docs/Images/CurrencyEnumGeneratorWindow.png)
 ## 🛠 В разработке
 
 - 🖼️ Sprite Bank
