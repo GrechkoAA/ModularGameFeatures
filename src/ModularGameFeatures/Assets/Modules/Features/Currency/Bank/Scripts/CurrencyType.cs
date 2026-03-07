@@ -1,10 +1,10 @@
-﻿namespace Modules.Features.Currency.Bank.Scripts
+namespace Modules.Features.Currency.Bank.Scripts
 {
     public enum CurrencyType : byte
     {
         None = 0,
         Gold = 1,
         Gems = 2,
-        Heart = 3
+        Heart = 3,
     }
 }
