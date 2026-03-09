@@ -24,6 +24,7 @@
 - ♻️ Object Pool
 - 🎶 Audio Bank
 - 🔁 Finite State Machine
+- 🧹 Missing Scripts
 
 ### 💰 Currency Bank
 
