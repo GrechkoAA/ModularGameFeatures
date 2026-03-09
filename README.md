@@ -23,6 +23,7 @@
 - 🎬 Scene Loader
 - ♻️ Object Pool
 - 🎶 Audio Bank
+- 🔁 Finite State Machine
 
 ### 💰 Currency Bank
 
