@@ -1,28 +1,37 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
+using Modules.Features.Currency.Bank.Scripts;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
 public class CurrencyEnumGeneratorWindow : EditorWindow
 {
-    private const string PATH = "Assets/Modules/Features/Currency/Bank/Scripts/CurrencyType.cs";
-
-    private List<string> currencies = new();
+    private List<string> currencies;
     private ReorderableList list;
 
     [MenuItem("Tools/CodeGenerator/💰 Currency")]
-    public static void Open()
-    {
-        GetWindow<CurrencyEnumGeneratorWindow>("Currency Generator");
-    }
+    public static void Open() => GetWindow<CurrencyEnumGeneratorWindow>("Currency Generator");
 
     private void OnEnable()
     {
-        LoadExistingCurrencies();
+        LoadCurrenciesFromEnum();
         SetupList();
+    }
+
+    private void LoadCurrenciesFromEnum()
+    {
+        currencies = Enum.GetNames(typeof(CurrencyType)).ToList();
+
+        if (!currencies.Contains("None"))
+            currencies.Insert(0, "None");
+        else if (currencies.IndexOf("None") != 0)
+        {
+            currencies.Remove("None");
+            currencies.Insert(0, "None");
+        }
     }
 
     private void SetupList()
@@ -37,29 +46,32 @@ public class CurrencyEnumGeneratorWindow : EditorWindow
         list.drawElementCallback = (rect, index, active, focused) =>
         {
             Rect numberRect = new Rect(rect.x, rect.y, 25, rect.height);
-            EditorGUI.LabelField(numberRect, (index + 1).ToString());
+            EditorGUI.LabelField(numberRect, index.ToString()); // ID с None = 0
 
             Rect textRect = new Rect(rect.x + 25, rect.y, rect.width - 25, rect.height);
-            currencies[index] = EditorGUI.TextField(textRect, currencies[index]);
+
+            if (index == 0)
+                EditorGUI.LabelField(textRect, currencies[index]); // None нельзя редактировать
+            else
+                currencies[index] = EditorGUI.TextField(textRect, currencies[index]);
+        };
+
+        list.onRemoveCallback = l =>
+        {
+            if (l.index == 0) return; // нельзя удалить None
+            currencies.RemoveAt(l.index);
         };
 
         list.onAddCallback = l =>
         {
             currencies.Add("NewCurrency");
         };
-
-        list.onRemoveCallback = l =>
-        {
-            currencies.RemoveAt(l.index);
-        };
     }
 
     private void OnGUI()
     {
         GUILayout.Space(10);
-
         list.DoLayoutList();
-
         GUILayout.Space(10);
 
         if (GUILayout.Button("Generate Enum"))
@@ -68,38 +80,24 @@ public class CurrencyEnumGeneratorWindow : EditorWindow
         }
     }
 
-    private void LoadExistingCurrencies()
-    {
-        currencies.Clear();
-
-        if (!File.Exists(PATH))
-            return;
-
-        var lines = File.ReadAllLines(PATH);
-
-        var values = lines
-            .Select(l => l.Trim())
-            .Where(l => l.Contains("=") && !l.Contains("None"))
-            .Select(l => Regex.Match(l, @"^\w+").Value)
-            .Where(v => !string.IsNullOrEmpty(v));
-
-        currencies = values.ToList();
-    }
-
     private void GenerateEnum()
     {
-        currencies = currencies
+        var uniqueCurrencies = currencies
             .Where(x => !string.IsNullOrWhiteSpace(x))
             .Distinct()
             .ToList();
 
-        Directory.CreateDirectory(Path.GetDirectoryName(PATH));
+        string currentDir = Path.GetDirectoryName(AssetDatabase.GetAssetPath(MonoScript.FromScriptableObject(this)));
+        string parentDir = Path.Combine(currentDir, "..");
+        string targetPath = Path.Combine(parentDir, "CurrencyType.cs");
+        targetPath = Path.GetFullPath(targetPath).Replace("\\", "/");
+
+        Directory.CreateDirectory(parentDir);
 
         string enumValues = "";
-
-        for (int i = 0; i < currencies.Count; i++)
+        for (int i = 1; i < uniqueCurrencies.Count; i++)
         {
-            enumValues += $"        {currencies[i]} = {i + 1},\n";
+            enumValues += $"        {uniqueCurrencies[i]} = {i},\n";
         }
 
         string code =
@@ -111,10 +109,9 @@ $@"namespace Modules.Features.Currency.Bank.Scripts
 {enumValues}    }}
 }}";
 
-        File.WriteAllText(PATH, code);
-
+        File.WriteAllText(targetPath, code);
         AssetDatabase.Refresh();
 
-        Debug.Log("CurrencyType enum generated!");
+        Debug.Log("<color=green>CurrencyType enum generated!</color>");
     }
 }

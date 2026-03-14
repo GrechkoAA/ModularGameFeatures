@@ -1,7 +1,7 @@
 {
     "name": "Modules.Features.CurrencyBank.Editor",
     "rootNamespace": "",
-    "references": [],
+    "references": ["GUID:8e48f5f7aa693494a9dab4140a953c28"],
     "includePlatforms": [
         "Editor"
     ],
