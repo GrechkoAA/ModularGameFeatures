@@ -189,7 +189,7 @@ namespace Modules.Features.Currency.Bank.Tests
             // starting value = 0
             yield return new TestCaseData(0, 0, 0).SetName("WhenStartingZeroAndSettingZero_ThenValueRemainsZero");
             yield return new TestCaseData(0, 5, 5).SetName("WhenStartingZeroAndSettingPositive_ThenValueBecomesSetAmount");
-            yield return new TestCaseData(0, -5, 0).SetName("Set_WhenStartingZeroAndSettingNegative_ThenValueBecomesZero");
+            yield return new TestCaseData(0, -5, 0).SetName("WhenStartingZeroAndSettingNegative_ThenValueBecomesZero");
 
             // starting value > 0
             yield return new TestCaseData(10, 0, 0).SetName("WhenStartingPositiveAndSettingZero_ThenValueBecomesZero");
