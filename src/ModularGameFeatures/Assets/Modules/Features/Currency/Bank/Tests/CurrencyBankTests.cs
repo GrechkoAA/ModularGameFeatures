@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Modules.Features.Currency.Bank.Tests
 {
     [TestFixture]
-    public class TestsCurrencyBank
+    public class CurrencyBankTests
     {
         private CurrencyBank _bank;
 
