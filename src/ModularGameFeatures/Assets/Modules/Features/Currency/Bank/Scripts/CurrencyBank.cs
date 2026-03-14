@@ -101,7 +101,7 @@ namespace Modules.Features.Currency.Bank.Scripts
 
             foreach (var price in cost)
             {
-                if (price.Amount >= GetCell(price.Type).Value)
+                if (GetCell(price.Type).Value < price.Amount)
                     return false;
             }
 
