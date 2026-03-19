@@ -14,7 +14,11 @@ namespace Modules.Features.Currency.Bank.Tests
         [TestCase(10, 10)]
         public void Constructor_ShouldClampInitialValue(int initial, int expected)
         {
-            CurrencyCell currency = new(initial, CurrencyType.None);
+            // Arrange
+            CurrencyType type = CurrencyType.None;
+            
+            // Act
+            CurrencyCell currency = new(initial, type);
 
             // Assert
             Assert.AreEqual(expected, currency.Value);
@@ -64,22 +68,22 @@ namespace Modules.Features.Currency.Bank.Tests
         private static IEnumerable<TestCaseData> AddCases()
         {
             // starting value = 0
-            yield return new TestCaseData(0, 0, 0).SetName("WhenStartingZeroAndAddingZero_ThenValueRemainsZero");
-            yield return new TestCaseData(0, 5, 5).SetName("WhenStartingZeroAndAddingPositive_ThenValueBecomesAddedAmount");
-            yield return new TestCaseData(0, -5, 0).SetName("WhenStartingZeroAndAddingNegative_ThenValueRemainsZero");
+            yield return new TestCaseData(0, 0, 0).SetName("WhenStartingZero_AndAddingZero_ThenValueRemainsZero");
+            yield return new TestCaseData(0, 5, 5).SetName("WhenStartingZero_AndAddingPositive_ThenValueBecomesAddedAmount");
+            yield return new TestCaseData(0, -5, 0).SetName("WhenStartingZero_AndAddingNegative_ThenValueRemainsZero");
 
             // starting value > 0
-            yield return new TestCaseData(10, 0, 10).SetName("WhenStartingPositiveAndAddingZero_ThenValueRemainsSame");
-            yield return new TestCaseData(1, 1, 2).SetName("WhenStartingPositiveAndAddingPositive_ThenValueIncreases");
-            yield return new TestCaseData(15, 15, 30).SetName("WhenStartingPositiveAndAddingPositive_ThenValueIncreasesLarge");
-            yield return new TestCaseData(10, -5, 10).SetName("WhenStartingPositiveAndAddingNegative_ThenValueRemainsSame");
+            yield return new TestCaseData(10, 0, 10).SetName("WhenStartingPositive_AndAddingZero_ThenValueRemainsSame");
+            yield return new TestCaseData(1, 1, 2).SetName("WhenStartingPositive_AndAddingPositive_ThenValueIncreases");
+            yield return new TestCaseData(15, 15, 30).SetName("WhenStartingPositive_AndAddingPositive_ThenValueIncreasesLarge");
+            yield return new TestCaseData(10, -5, 10).SetName("WhenStartingPositive_AndAddingNegative_ThenValueRemainsSame");
 
             // starting value < 0
-            yield return new TestCaseData(-10, 0, 0).SetName("WhenStartingNegativeAndAddingZero_ThenValueBecomesZero");
-            yield return new TestCaseData(-10, 5, 5).SetName("WhenStartingNegativeAndAddingPositive_ThenValueBecomesAddedAmount");
-            yield return new TestCaseData(-100, 100, 100).SetName("WhenStartingNegativeAndAddingPositive_ThenValueBecomesAddedAmountLarge");
-            yield return new TestCaseData(-10, -5, 0).SetName("WhenStartingNegativeAndAddingNegative_ThenValueBecomesZero");
-            yield return new TestCaseData(-100, -100, 0).SetName("WhenStartingNegativeAndAddingNegative_ThenValueBecomesZeroLarge");
+            yield return new TestCaseData(-10, 0, 0).SetName("WhenStartingNegative_AndAddingZero_ThenValueBecomesZero");
+            yield return new TestCaseData(-10, 5, 5).SetName("WhenStartingNegative_AndAddingPositive_ThenValueBecomesAddedAmount");
+            yield return new TestCaseData(-100, 100, 100).SetName("WhenStartingNegative_AndAddingPositive_ThenValueBecomesAddedAmountLarge");
+            yield return new TestCaseData(-10, -5, 0).SetName("WhenStartingNegative_AndAddingNegative_ThenValueBecomesZero");
+            yield return new TestCaseData(-100, -100, 0).SetName("WhenStartingNegative_AndAddingNegative_ThenValueBecomesZeroLarge");
         }
 
         #endregion
@@ -126,21 +130,21 @@ namespace Modules.Features.Currency.Bank.Tests
         private static IEnumerable<TestCaseData> SpendCases()
         {
             // starting value = 0
-            yield return new TestCaseData(0, 0, 0).SetName("WhenStartingZeroAndSpendingZero_ThenValueRemainsZero");
-            yield return new TestCaseData(0, 5, 0).SetName("WhenStartingZeroAndSpendingPositive_ThenValueRemainsZero");
-            yield return new TestCaseData(0, -5, 0).SetName("WhenStartingZeroAndSpendingNegative_ThenValueRemainsZero");
+            yield return new TestCaseData(0, 0, 0).SetName("WhenStartingZero_AndSpendingZero_ThenValueRemainsZero");
+            yield return new TestCaseData(0, 5, 0).SetName("WhenStartingZero_AndSpendingPositive_ThenValueRemainsZero");
+            yield return new TestCaseData(0, -5, 0).SetName("WhenStartingZero_AndSpendingNegative_ThenValueRemainsZero");
             
             // starting value > 0
-            yield return new TestCaseData(10, 0, 10).SetName("WhenStartingPositiveAndSpendingZero_ThenValueRemainsSame");
-            yield return new TestCaseData(10, 5, 5).SetName("WhenStartingPositiveAndSpendingLessThanValue_ThenValueDecreases");
-            yield return new TestCaseData(10, 10, 0).SetName("WhenStartingPositiveAndSpendingExactValue_ThenValueBecomesZero");
-            yield return new TestCaseData(10, 15, 0).SetName("WhenStartingPositiveAndSpendingMoreThanValue_ThenValueBecomesZero");
-            yield return new TestCaseData(10, -5, 10).SetName("WhenStartingPositiveAndSpendingNegative_ThenValueRemainsSame");
+            yield return new TestCaseData(10, 0, 10).SetName("WhenStartingPositive_AndSpendingZero_ThenValueRemainsSame");
+            yield return new TestCaseData(10, 5, 5).SetName("WhenStartingPositive_AndSpendingLessThanValue_ThenValueDecreases");
+            yield return new TestCaseData(10, 10, 0).SetName("WhenStartingPositive_AndSpendingExactValue_ThenValueBecomesZero");
+            yield return new TestCaseData(10, 15, 0).SetName("WhenStartingPositive_AndSpendingMoreThanValue_ThenValueBecomesZero");
+            yield return new TestCaseData(10, -5, 10).SetName("WhenStartingPositive_AndSpendingNegative_ThenValueRemainsSame");
             
             // starting value < 0
-            yield return new TestCaseData(-10, 0, 0).SetName("WhenStartingNegativeAndSpendingZero_ThenValueBecomesZero");
-            yield return new TestCaseData(-10, 5, 0).SetName("WhenStartingNegativeAndSpendingPositive_ThenValueBecomesZero");
-            yield return new TestCaseData(-10, -5, 0).SetName("WhenStartingNegativeAndSpendingNegative_ThenValueBecomesZero");
+            yield return new TestCaseData(-10, 0, 0).SetName("WhenStartingNegative_AndSpendingZero_ThenValueBecomesZero");
+            yield return new TestCaseData(-10, 5, 0).SetName("WhenStartingNegative_AndSpendingPositive_ThenValueBecomesZero");
+            yield return new TestCaseData(-10, -5, 0).SetName("WhenStartingNegative_AndSpendingNegative_ThenValueBecomesZero");
         }
         
         #endregion
@@ -187,20 +191,20 @@ namespace Modules.Features.Currency.Bank.Tests
         private static IEnumerable<TestCaseData> SetCases()
         {
             // starting value = 0
-            yield return new TestCaseData(0, 0, 0).SetName("WhenStartingZeroAndSettingZero_ThenValueRemainsZero");
-            yield return new TestCaseData(0, 5, 5).SetName("WhenStartingZeroAndSettingPositive_ThenValueBecomesSetAmount");
-            yield return new TestCaseData(0, -5, 0).SetName("WhenStartingZeroAndSettingNegative_ThenValueBecomesZero");
+            yield return new TestCaseData(0, 0, 0).SetName("WhenStartingZero_AndSettingZero_ThenValueRemainsZero");
+            yield return new TestCaseData(0, 5, 5).SetName("WhenStartingZero_AndSettingPositive_ThenValueBecomesSetAmount");
+            yield return new TestCaseData(0, -5, 0).SetName("WhenStartingZero_AndSettingNegative_ThenValueBecomesZero");
 
             // starting value > 0
-            yield return new TestCaseData(10, 0, 0).SetName("WhenStartingPositiveAndSettingZero_ThenValueBecomesZero");
-            yield return new TestCaseData(10, 5, 5).SetName("WhenStartingPositiveAndSettingPositive_ThenValueBecomesSetAmount");
-            yield return new TestCaseData(10, 20, 20).SetName("WhenStartingPositiveAndSettingLargerPositive_ThenValueBecomesSetAmount");
-            yield return new TestCaseData(10, -5, 0).SetName("WhenStartingPositiveAndSettingNegative_ThenValueBecomesZero");
+            yield return new TestCaseData(10, 0, 0).SetName("WhenStartingPositive_AndSettingZero_ThenValueBecomesZero");
+            yield return new TestCaseData(10, 5, 5).SetName("WhenStartingPositive_AndSettingPositive_ThenValueBecomesSetAmount");
+            yield return new TestCaseData(10, 20, 20).SetName("WhenStartingPositive_AndSettingLargerPositive_ThenValueBecomesSetAmount");
+            yield return new TestCaseData(10, -5, 0).SetName("WhenStartingPositive_AndSettingNegative_ThenValueBecomesZero");
 
             // starting value < 0
-            yield return new TestCaseData(-10, 0, 0).SetName("WhenStartingNegativeAndSettingZero_ThenValueBecomesZero");
-            yield return new TestCaseData(-10, 5, 5).SetName("WhenStartingNegativeAndSettingPositive_ThenValueBecomesSetAmount");
-            yield return new TestCaseData(-10, -5, 0).SetName("WhenStartingNegativeAndSettingNegative_ThenValueBecomesZero");
+            yield return new TestCaseData(-10, 0, 0).SetName("WhenStartingNegative_AndSettingZero_ThenValueBecomesZero");
+            yield return new TestCaseData(-10, 5, 5).SetName("WhenStartingNegative_AndSettingPositive_ThenValueBecomesSetAmount");
+            yield return new TestCaseData(-10, -5, 0).SetName("WhenStartingNegative_AndSettingNegative_ThenValueBecomesZero");
         }
 
         #endregion
