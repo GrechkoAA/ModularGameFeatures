@@ -25,6 +25,7 @@
 - 🎶 Audio Bank
 - 🔁 Finite State Machine
 - 🧹 Missing Scripts
+- TrajectoryDrawer
 
 ### 💰 Currency Bank
 
