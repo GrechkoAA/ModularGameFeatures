@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Modules.Features.Currency.Bank.Scripts;
 using NUnit.Framework;
 
@@ -7,59 +8,64 @@ namespace Modules.Features.Currency.Bank.Tests
 {
     public class CurrencyCellTests
     {
+        private static CurrencyCell GetAnyValidCurrency(int initialAmount)
+        {
+            var currencyType = Enum.GetValues(typeof(CurrencyType))
+                .Cast<CurrencyType>()
+                .First(x => x != CurrencyType.None);
+
+            return new CurrencyCell(initialAmount, currencyType);
+        }
+
         #region Constructor
-        
+
         [TestCase(-10, 0)]
         [TestCase(0, 0)]
         [TestCase(10, 10)]
         public void Constructor_ShouldClampInitialValue(int initial, int expected)
         {
             // Arrange
-            CurrencyType type = CurrencyType.None;
-            
-            // Act
-            CurrencyCell currency = new(initial, type);
+            CurrencyCell sut = GetAnyValidCurrency(initial);
 
             // Assert
-            Assert.AreEqual(expected, currency.Value);
+            Assert.AreEqual(expected, sut.Value);
         }
-        
+
         #endregion
-        
+
         #region Add
 
         [TestCaseSource(nameof(AddCases))]
         public void Add_ShouldWorkCorrectly(int initialAmount, int addAmount, int expected)
         {
             // Arrange
-            CurrencyCell currencyGold = new(initialAmount, CurrencyType.None);
+            CurrencyCell sut = GetAnyValidCurrency(initialAmount);
 
             // Act
-            currencyGold.Add(addAmount);
+            sut.Add(addAmount);
 
             // Assert
-            Assert.AreEqual(expected, currencyGold.Value);
+            Assert.AreEqual(expected, sut.Value);
         }
-        
+
         [TestCaseSource(nameof(AddCases))]
         public void Add_ShouldTriggerAddedEvent(int initialAmount, int addAmount, int expected)
         {
             // Arrange
-            CurrencyCell currencyGold = new(initialAmount, CurrencyType.None);
-            
-            // Act
-            int validInitialAmount = currencyGold.Value;
+            CurrencyCell sut = GetAnyValidCurrency(initialAmount);
+            int validInitialAmount = sut.Value;
             int previous = 0;
             int current = 0;
 
-            currencyGold.OnAdded += (cur, prev) =>
+            // Act
+            sut.OnAdded += (cur, prev) =>
             {
                 current = cur;
                 previous = prev;
             };
 
-            currencyGold.Add(addAmount);
-            
+            sut.Add(addAmount);
+
             // Assert
             Assert.AreEqual(expected, current);
             Assert.AreEqual(validInitialAmount, previous);
@@ -69,21 +75,28 @@ namespace Modules.Features.Currency.Bank.Tests
         {
             // starting value = 0
             yield return new TestCaseData(0, 0, 0).SetName("WhenStartingZero_AndAddingZero_ThenValueRemainsZero");
-            yield return new TestCaseData(0, 5, 5).SetName("WhenStartingZero_AndAddingPositive_ThenValueBecomesAddedAmount");
+            yield return new TestCaseData(0, 5, 5).SetName(
+                "WhenStartingZero_AndAddingPositive_ThenValueBecomesAddedAmount");
             yield return new TestCaseData(0, -5, 0).SetName("WhenStartingZero_AndAddingNegative_ThenValueRemainsZero");
 
             // starting value > 0
             yield return new TestCaseData(10, 0, 10).SetName("WhenStartingPositive_AndAddingZero_ThenValueRemainsSame");
             yield return new TestCaseData(1, 1, 2).SetName("WhenStartingPositive_AndAddingPositive_ThenValueIncreases");
-            yield return new TestCaseData(15, 15, 30).SetName("WhenStartingPositive_AndAddingPositive_ThenValueIncreasesLarge");
-            yield return new TestCaseData(10, -5, 10).SetName("WhenStartingPositive_AndAddingNegative_ThenValueRemainsSame");
+            yield return new TestCaseData(15, 15, 30).SetName(
+                "WhenStartingPositive_AndAddingPositive_ThenValueIncreasesLarge");
+            yield return new TestCaseData(10, -5, 10).SetName(
+                "WhenStartingPositive_AndAddingNegative_ThenValueRemainsSame");
 
             // starting value < 0
             yield return new TestCaseData(-10, 0, 0).SetName("WhenStartingNegative_AndAddingZero_ThenValueBecomesZero");
-            yield return new TestCaseData(-10, 5, 5).SetName("WhenStartingNegative_AndAddingPositive_ThenValueBecomesAddedAmount");
-            yield return new TestCaseData(-100, 100, 100).SetName("WhenStartingNegative_AndAddingPositive_ThenValueBecomesAddedAmountLarge");
-            yield return new TestCaseData(-10, -5, 0).SetName("WhenStartingNegative_AndAddingNegative_ThenValueBecomesZero");
-            yield return new TestCaseData(-100, -100, 0).SetName("WhenStartingNegative_AndAddingNegative_ThenValueBecomesZeroLarge");
+            yield return new TestCaseData(-10, 5, 5).SetName(
+                "WhenStartingNegative_AndAddingPositive_ThenValueBecomesAddedAmount");
+            yield return new TestCaseData(-100, 100, 100).SetName(
+                "WhenStartingNegative_AndAddingPositive_ThenValueBecomesAddedAmountLarge");
+            yield return new TestCaseData(-10, -5, 0).SetName(
+                "WhenStartingNegative_AndAddingNegative_ThenValueBecomesZero");
+            yield return new TestCaseData(-100, -100, 0).SetName(
+                "WhenStartingNegative_AndAddingNegative_ThenValueBecomesZeroLarge");
         }
 
         #endregion
@@ -94,34 +107,33 @@ namespace Modules.Features.Currency.Bank.Tests
         public void Spend_ShouldWorkCorrectly(int initialAmount, int spendAmount, int expected)
         {
             // Arrange
-            CurrencyCell currencyGold = new(initialAmount, CurrencyType.None);
+            CurrencyCell sut = GetAnyValidCurrency(initialAmount);
 
             // Act
-            currencyGold.Spend(spendAmount);
+            sut.Spend(spendAmount);
 
             // Assert
-            Assert.AreEqual(expected, currencyGold.Value);
+            Assert.AreEqual(expected, sut.Value);
         }
-        
+
         [TestCaseSource(nameof(SpendCases))]
         public void Spend_ShouldTriggerSpendEvent(int initialAmount, int spendAmount, int expected)
         {
             // Arrange
-            CurrencyCell currencyGold = new(initialAmount, CurrencyType.None);
-            
-            // Act
-            int validInitialAmount = currencyGold.Value;
+            CurrencyCell sut = GetAnyValidCurrency(initialAmount);
+            int validInitialAmount = sut.Value;
             int previous = 0;
             int current = 0;
 
-            currencyGold.OnSpent += (cur, prev) =>
+            // Act
+            sut.OnSpent += (cur, prev) =>
             {
                 current = cur;
                 previous = prev;
             };
 
-            currencyGold.Spend(spendAmount);
-            
+            sut.Spend(spendAmount);
+
             // Assert
             Assert.AreEqual(expected, current);
             Assert.AreEqual(validInitialAmount, previous);
@@ -132,57 +144,65 @@ namespace Modules.Features.Currency.Bank.Tests
             // starting value = 0
             yield return new TestCaseData(0, 0, 0).SetName("WhenStartingZero_AndSpendingZero_ThenValueRemainsZero");
             yield return new TestCaseData(0, 5, 0).SetName("WhenStartingZero_AndSpendingPositive_ThenValueRemainsZero");
-            yield return new TestCaseData(0, -5, 0).SetName("WhenStartingZero_AndSpendingNegative_ThenValueRemainsZero");
-            
+            yield return
+                new TestCaseData(0, -5, 0).SetName("WhenStartingZero_AndSpendingNegative_ThenValueRemainsZero");
+
             // starting value > 0
-            yield return new TestCaseData(10, 0, 10).SetName("WhenStartingPositive_AndSpendingZero_ThenValueRemainsSame");
-            yield return new TestCaseData(10, 5, 5).SetName("WhenStartingPositive_AndSpendingLessThanValue_ThenValueDecreases");
-            yield return new TestCaseData(10, 10, 0).SetName("WhenStartingPositive_AndSpendingExactValue_ThenValueBecomesZero");
-            yield return new TestCaseData(10, 15, 0).SetName("WhenStartingPositive_AndSpendingMoreThanValue_ThenValueBecomesZero");
-            yield return new TestCaseData(10, -5, 10).SetName("WhenStartingPositive_AndSpendingNegative_ThenValueRemainsSame");
-            
+            yield return new TestCaseData(10, 0, 10).SetName(
+                "WhenStartingPositive_AndSpendingZero_ThenValueRemainsSame");
+            yield return new TestCaseData(10, 5, 5).SetName(
+                "WhenStartingPositive_AndSpendingLessThanValue_ThenValueDecreases");
+            yield return new TestCaseData(10, 10, 0).SetName(
+                "WhenStartingPositive_AndSpendingExactValue_ThenValueBecomesZero");
+            yield return new TestCaseData(10, 15, 0).SetName(
+                "WhenStartingPositive_AndSpendingMoreThanValue_ThenValueBecomesZero");
+            yield return new TestCaseData(10, -5, 10).SetName(
+                "WhenStartingPositive_AndSpendingNegative_ThenValueRemainsSame");
+
             // starting value < 0
-            yield return new TestCaseData(-10, 0, 0).SetName("WhenStartingNegative_AndSpendingZero_ThenValueBecomesZero");
-            yield return new TestCaseData(-10, 5, 0).SetName("WhenStartingNegative_AndSpendingPositive_ThenValueBecomesZero");
-            yield return new TestCaseData(-10, -5, 0).SetName("WhenStartingNegative_AndSpendingNegative_ThenValueBecomesZero");
+            yield return new TestCaseData(-10, 0, 0).SetName(
+                "WhenStartingNegative_AndSpendingZero_ThenValueBecomesZero");
+            yield return new TestCaseData(-10, 5, 0).SetName(
+                "WhenStartingNegative_AndSpendingPositive_ThenValueBecomesZero");
+            yield return new TestCaseData(-10, -5, 0).SetName(
+                "WhenStartingNegative_AndSpendingNegative_ThenValueBecomesZero");
         }
-        
+
         #endregion
 
         #region Set
-        
+
         [TestCaseSource(nameof(SetCases))]
         public void Set_ShouldWorkCorrectly(int initialAmount, int setValue, int expected)
         {
             // Arrange
-            CurrencyCell currencyGold = new(initialAmount, CurrencyType.None);
+            CurrencyCell sut = GetAnyValidCurrency(initialAmount);
 
             // Act
-            currencyGold.Set(setValue);
+            sut.Set(setValue);
 
             // Assert
-            Assert.AreEqual(expected, currencyGold.Value);
+            Assert.AreEqual(expected, sut.Value);
         }
 
         [TestCaseSource(nameof(SetCases))]
         public void Set_ShouldTriggerSetEvent(int initialAmount, int setValue, int expected)
         {
             // Arrange
-            CurrencyCell currencyGold = new(initialAmount, CurrencyType.None);
-            
-            // Act
-            int validInitialAmount = currencyGold.Value;
+            CurrencyCell sut = GetAnyValidCurrency(initialAmount);
+            int validInitialAmount = sut.Value;
             int previous = 0;
             int current = 0;
 
-            currencyGold.OnSet += (cur, prev) =>
+            // Act
+            sut.OnSet += (cur, prev) =>
             {
                 current = cur;
                 previous = prev;
             };
 
-            currencyGold.Set(setValue);
-            
+            sut.Set(setValue);
+
             // Assert
             Assert.AreEqual(expected, current);
             Assert.AreEqual(validInitialAmount, previous);
@@ -192,35 +212,42 @@ namespace Modules.Features.Currency.Bank.Tests
         {
             // starting value = 0
             yield return new TestCaseData(0, 0, 0).SetName("WhenStartingZero_AndSettingZero_ThenValueRemainsZero");
-            yield return new TestCaseData(0, 5, 5).SetName("WhenStartingZero_AndSettingPositive_ThenValueBecomesSetAmount");
+            yield return new TestCaseData(0, 5, 5).SetName(
+                "WhenStartingZero_AndSettingPositive_ThenValueBecomesSetAmount");
             yield return new TestCaseData(0, -5, 0).SetName("WhenStartingZero_AndSettingNegative_ThenValueBecomesZero");
 
             // starting value > 0
             yield return new TestCaseData(10, 0, 0).SetName("WhenStartingPositive_AndSettingZero_ThenValueBecomesZero");
-            yield return new TestCaseData(10, 5, 5).SetName("WhenStartingPositive_AndSettingPositive_ThenValueBecomesSetAmount");
-            yield return new TestCaseData(10, 20, 20).SetName("WhenStartingPositive_AndSettingLargerPositive_ThenValueBecomesSetAmount");
-            yield return new TestCaseData(10, -5, 0).SetName("WhenStartingPositive_AndSettingNegative_ThenValueBecomesZero");
+            yield return new TestCaseData(10, 5, 5).SetName(
+                "WhenStartingPositive_AndSettingPositive_ThenValueBecomesSetAmount");
+            yield return new TestCaseData(10, 20, 20).SetName(
+                "WhenStartingPositive_AndSettingLargerPositive_ThenValueBecomesSetAmount");
+            yield return new TestCaseData(10, -5, 0).SetName(
+                "WhenStartingPositive_AndSettingNegative_ThenValueBecomesZero");
 
             // starting value < 0
-            yield return new TestCaseData(-10, 0, 0).SetName("WhenStartingNegative_AndSettingZero_ThenValueBecomesZero");
-            yield return new TestCaseData(-10, 5, 5).SetName("WhenStartingNegative_AndSettingPositive_ThenValueBecomesSetAmount");
-            yield return new TestCaseData(-10, -5, 0).SetName("WhenStartingNegative_AndSettingNegative_ThenValueBecomesZero");
+            yield return
+                new TestCaseData(-10, 0, 0).SetName("WhenStartingNegative_AndSettingZero_ThenValueBecomesZero");
+            yield return new TestCaseData(-10, 5, 5).SetName(
+                "WhenStartingNegative_AndSettingPositive_ThenValueBecomesSetAmount");
+            yield return new TestCaseData(-10, -5, 0).SetName(
+                "WhenStartingNegative_AndSettingNegative_ThenValueBecomesZero");
         }
 
         #endregion
 
         #region ChangeEvent
-        
+
         [TestCaseSource(nameof(ChangeMethods))]
         public void Methods_ShouldTriggerChangedEvent(int initialAmount, Action<CurrencyCell> operation)
         {
             // Arrange
-            CurrencyCell currency = new(initialAmount, CurrencyType.None);
+            CurrencyCell sut = GetAnyValidCurrency(initialAmount);
             bool triggered = false;
-            currency.OnChanged += () => triggered = true;
+            sut.OnChanged += () => triggered = true;
 
             // Act
-            operation(currency);
+            operation(sut);
 
             // Assert
             Assert.IsTrue(triggered, $"OnChanged was not triggered for initialAmount={initialAmount}");
@@ -261,7 +288,7 @@ namespace Modules.Features.Currency.Bank.Tests
                 }
             }
         }
-        
+
         #endregion
     }
 }
