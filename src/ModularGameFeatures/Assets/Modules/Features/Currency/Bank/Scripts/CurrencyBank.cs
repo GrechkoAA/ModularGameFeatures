@@ -59,10 +59,12 @@ namespace Modules.Features.Currency.Bank.Scripts
         /// <returns>Возвращает <c>true</c>, если списание выполнено успешно, иначе <c>false</c>.</returns>
         public bool TrySpendCurrencies(IEnumerable<CurrencyAmount> cost)
         {
-            if (!IsEnough(cost))
+            var costList = new List<CurrencyAmount>(cost);
+
+            if (!IsEnough(costList))
                 return false;
 
-            Apply(cost, (c, a) => c.Spend(a));
+            Apply(costList, (c, a) => c.Spend(a));
 
             return true;
         }
@@ -109,15 +111,6 @@ namespace Modules.Features.Currency.Bank.Scripts
         }
 
         /// <summary>
-        /// Возвращает перечислитель по всем валютным ячейкам банка.
-        /// </summary>
-        public IEnumerator<CurrencyCell> GetEnumerator() =>
-            _cellsForward.Values.GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() =>
-            GetEnumerator();
-
-        /// <summary>
         /// Применяет указанное действие ко всем элементам списка валют.
         /// </summary>
         /// <param name="cost">Список валют и количеств.</param>
@@ -131,5 +124,14 @@ namespace Modules.Features.Currency.Bank.Scripts
             foreach (var price in cost)
                 action(GetCell(price.Type), price.Amount);
         }
+
+        /// <summary>
+        /// Возвращает перечислитель по всем валютным ячейкам банка.
+        /// </summary>
+        public IEnumerator<CurrencyCell> GetEnumerator() =>
+            _cellsForward.Values.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() =>
+            GetEnumerator();
     }
 }
