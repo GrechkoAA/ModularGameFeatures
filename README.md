@@ -26,6 +26,7 @@
 - 🔁 Finite State Machine
 - 🧹 Missing Scripts
 - TrajectoryDrawer
+- Logger
 
 ### 💰 Currency Bank
 
