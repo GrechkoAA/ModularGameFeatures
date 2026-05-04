@@ -27,6 +27,7 @@
 - 🧹 Missing Scripts
 - TrajectoryDrawer
 - Logger
+- Color-Coded Trigger Zone
 
 ### 💰 Currency Bank
 
