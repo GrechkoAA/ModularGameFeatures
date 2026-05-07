@@ -14,7 +14,9 @@
 - Может быть интегрирован в другой проект с минимальной настройкой
 
 ## 🧩 Доступные модули
+
 - [Currency Bank](#-currency-bank)
+- [Logger](#logger)
 
 ## 🛠 В разработке
 
@@ -29,6 +31,7 @@
 - Logger
 - Color-Coded Trigger Zone
 
+---
 ### 💰 Currency Bank
 
 Модуль управления игровыми валютами с изолированной бизнес-логикой и операциями над балансом.
@@ -48,3 +51,19 @@
 `Tools → CodeGenerator → Currency`
 
 ![Currency Generator Window](https://raw.githubusercontent.com/GrechkoAA/ModularGameFeatures/main/Docs/Images/CurrencyEnumGeneratorWindow.png)
+
+---
+### Logger
+
+Лёгкий и расширяемый логгер для Unity с поддержкой multiple sinks, записи в файл.
+
+**Возможности:**
+
+- Логирование: Info, Warning, Error, Exception
+- Поддержка нескольких sinks одновременно
+- Исключение логов из Release-сборок через Conditional
+
+**Доступные sinks**
+
+- UnityConsoleSink — вывод в Unity Console
+- FileLoggerSink — запись логов в файл
