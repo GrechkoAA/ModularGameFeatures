@@ -9,6 +9,10 @@ namespace Modules.Utilities
     public interface ILoggerSink
     {
         void Log(LogLevelType level, in LogMessage message, UnityEngine.Object context);
+    }
+
+    public interface IExceptionSink
+    {
         void Exception(Exception exception, UnityEngine.Object context);
     }
 }

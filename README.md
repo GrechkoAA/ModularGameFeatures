@@ -16,7 +16,7 @@
 ## 🧩 Доступные модули
 
 - [Currency Bank](#-currency-bank)
-- [Logger](#logger)
+- [Logger](#-logger)
 
 ## 🛠 В разработке
 
@@ -30,7 +30,7 @@
 - TrajectoryDrawer
 - Logger
 - Color-Coded Trigger Zone
-
+- Scene Switcher
 ---
 ### 💰 Currency Bank
 
@@ -53,17 +53,44 @@
 ![Currency Generator Window](https://raw.githubusercontent.com/GrechkoAA/ModularGameFeatures/main/Docs/Images/CurrencyEnumGeneratorWindow.png)
 
 ---
-### Logger
+### 📝 Logger
+Логгер спроектирован так, чтобы **не влиять на производительность в Release-сборках**.
 
-Лёгкий и расширяемый логгер для Unity с поддержкой multiple sinks, записи в файл.
+Все вызовы логирования **могут быть полностью удалены на этапе компиляции** через `Conditional`, что означает:
 
-**Возможности:**
+- в **Development Build** → логирование активно  
+- в **Release Build** → вызовы логгера полностью исключаются компилятором  
 
-- Логирование: Info, Warning, Error, Exception
-- Поддержка нескольких sinks одновременно
-- Исключение логов из Release-сборок через Conditional
+Это позволяет:
 
-**Доступные sinks**
+- не тратить производительность на логирование в рантайме  
+- не оставлять debug-код в продакшене  
+- использовать одинаковый код для dev и release сборок  
 
-- UnityConsoleSink — вывод в Unity Console
-- FileLoggerSink — запись логов в файл
+---
+
+### ✨ Возможности
+
+- Логирование: `Info`, `Warning`, `Error`, `Exception`  
+- Поддержка нескольких sinks одновременно  
+- Исключение логов из Release-сборок через `Conditional`  
+
+---
+
+### 📦 Доступные sinks
+
+- `UnityConsoleSink` — вывод в Unity Console  
+- `FileLoggerSink` — запись логов в файл  
+
+---
+
+### 🛡️ Обработка исключений (важно)
+
+Логгер позволяет централизованно логировать и пробрасывать исключения одновременно:
+
+```csharp
+if (_rigidBody == null)
+{
+    throw _logger.Exception(new NullReferenceException(nameof(_rigidBody)));
+}
+```
