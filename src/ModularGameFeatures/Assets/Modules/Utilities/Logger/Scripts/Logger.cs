@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -8,7 +9,6 @@ namespace Modules.Utilities
     /// <summary>
     /// Централизованный Logger.
     /// Поддерживает различные типы логирования через ILoggerSink.
-    
     /// Особенности:
     /// - Поддержка нескольких sinks одновременно
     /// - Логирование Info / Warning / Error / Exception
@@ -18,31 +18,50 @@ namespace Modules.Utilities
     /// </summary>
     public class Logger
     {
-        private readonly ILoggerSink[] _sinks;
+        private const string DEVELOPMENT_BUILD = "DEVELOPMENT_BUILD";
+        private const string UNITY_EDITOR = "UNITY_EDITOR";
 
-        public Logger(ILoggerSink[] sinks) =>
+        private readonly ILoggerSink[] _sinks;
+        private readonly IExceptionSink[] _exceptionSinks;
+
+        public Logger(ILoggerSink[] sinks)
+        {
             _sinks = sinks;
+            _exceptionSinks = sinks.OfType<IExceptionSink>().ToArray();
+        }
+
+        public static Logger Create(params ILoggerSink[] sinks) =>
+            new Logger(sinks);
 
         [HideInCallstack]
-        [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        [Conditional(UNITY_EDITOR), Conditional(DEVELOPMENT_BUILD)]
         public void Info(string message, string tag = null, Object context = null)
             => Log(LogLevelType.Info, message, tag, context);
 
         [HideInCallstack]
-        [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        [Conditional(UNITY_EDITOR), Conditional(DEVELOPMENT_BUILD)]
         public void Warning(string message, string tag = null, Object context = null)
             => Log(LogLevelType.Warning, message, tag, context);
 
         [HideInCallstack]
-        [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        [Conditional(UNITY_EDITOR), Conditional(DEVELOPMENT_BUILD)]
         public void Error(string message, string tag = null, Object context = null)
             => Log(LogLevelType.Error, message, tag, context);
-        
+
         [HideInCallstack]
-        public void Exception(Exception ex, Object context = null)
+        public Exception Exception(Exception exception, Object context = null)
         {
-            for (int i = 0; i < _sinks.Length; i++)
-                _sinks[i].Exception(ex, context);
+            LogException(exception, context);
+
+            return exception;
+        }
+
+        [HideInCallstack]
+        [Conditional(UNITY_EDITOR), Conditional(DEVELOPMENT_BUILD)]
+        private void LogException(Exception exception, Object context)
+        {
+            for (int i = 0; i < _exceptionSinks.Length; i++)
+                _exceptionSinks[i].Exception(exception, context);
         }
 
         [HideInCallstack]

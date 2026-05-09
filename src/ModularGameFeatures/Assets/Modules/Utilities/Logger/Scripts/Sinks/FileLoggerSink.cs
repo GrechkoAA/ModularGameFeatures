@@ -10,7 +10,7 @@ namespace Modules.Utilities
     /// Sink для записи логов в файл.
     /// Поддерживает логирование сообщений, exception и Unity context objects.
     /// </summary>
-    public class FileLoggerSink : ILoggerSink, IDisposable
+    public class FileLoggerSink : ILoggerSink, IExceptionSink, IDisposable
     {
         private readonly string _path;
         private readonly StringBuilder _buffer = new(1024);
@@ -129,7 +129,7 @@ namespace Modules.Utilities
             File.AppendAllText(_path, _buffer.ToString(), Encoding.UTF8);
         }
 
-        private void WriteLine(string text) => 
+        private void WriteLine(string text) =>
             File.AppendAllText(_path, text + "\n", Encoding.UTF8);
     }
 }

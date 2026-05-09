@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -26,10 +25,6 @@ namespace Modules.Utilities
                     break;
             }
         }
-
-        [HideInCallstack]
-        public void Exception(Exception ex, Object context) => 
-            Debug.LogException(ex, context);
 
         private string Compose(in LogMessage msg)
         {
